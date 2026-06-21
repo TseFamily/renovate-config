@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "repo": "TseFamily/renovate-config",
+    "name": "TseFamily Renovate Config",
+    "lifecycle": "production",
+    "layer": "tooling",
+    "summary": "TseFamily Renovate relay preset that extends the Sylphx org-wide Renovate policy while keeping family-specific overrides in default.json.",
+    "goals": [
+      "Provide the TseFamily Renovate relay preset for repositories that inherit the Sylphx org-wide dependency update policy.",
+      "Keep TseFamily-specific Renovate overrides explicit in default.json.",
+      "Preserve SylphxAI/renovate-config as the upstream source of truth for base Renovate policy."
+    ],
+    "nonGoals": [
+      "Own the Sylphx org-wide Renovate base policy or package-manager strategy.",
+      "Encode one application repository's dependency exceptions as a global TseFamily default without a documented reason.",
+      "Publish enterprise doctrine, project manifest schema, org rulesets, rollout issue reconciliation, or shared CI policy."
+    ]
+  },
+  "boundaries": {
+    "owns": [
+      {
+        "name": "tsefamily-renovate-relay",
+        "description": "The default.json Renovate preset consumed by TseFamily repositories and any intentionally family-wide overrides."
+      },
+      {
+        "name": "relay-documentation",
+        "description": "README documentation that explains the upstream Sylphx policy relationship and local override boundary."
+      }
+    ],
+    "doesNotOwn": [
+      "Sylphx org-wide Renovate base policy, shared dependency management doctrine, or package-manager strategy.",
+      "Individual application repository dependency exceptions unless intentionally promoted into a family-wide override.",
+      "Enterprise doctrine, project manifest schema, rollout issue reconciliation, org rulesets, or shared workflow implementation."
+    ],
+    "publicSurfaces": [
+      {
+        "type": "manifest",
+        "name": "Renovate relay preset",
+        "location": "default.json"
+      },
+      {
+        "type": "documentation",
+        "name": "Relay README",
+        "location": "README.md"
+      },
+      {
+        "type": "manifest",
+        "name": "Project control-plane manifest",
+        "location": ".doctrine/project.json"
+      }
+    ],
+    "allowedDependencies": [
+      {
+        "repo": "SylphxAI/doctrine",
+        "surface": "project manifest schema, standards, and rollout audit",
+        "direction": "downward"
+      },
+      {
+        "repo": "SylphxAI/renovate-config",
+        "surface": "org-wide Renovate base preset",
+        "direction": "downward"
+      }
+    ],
+    "forbiddenCouplings": [
+      "Do not copy the Sylphx base Renovate policy into this repository instead of extending the upstream preset.",
+      "Do not add one repository's dependency exception as a TseFamily-wide default without documenting why it is family-wide.",
+      "Do not make applications depend on undocumented Renovate behavior outside default.json and README.md.",
+      "Do not publish enterprise process policy from this repository instead of SylphxAI/doctrine or SylphxAI/renovate-config."
+    ]
+  },
+  "documentation": {
+    "adr": {
+      "path": "docs/adr/",
+      "status": "planned"
+    },
+    "specs": {
+      "path": "README.md",
+      "status": "present"
+    },
+    "catalog": {
+      "path": ".doctrine/project.json",
+      "status": "present"
+    },
+    "runbooks": {
+      "path": "README.md",
+      "status": "present"
+    },
+    "generatedReferences": {
+      "path": "default.json",
+      "status": "present"
+    }
+  },
+  "delivery": {
+    "ciModel": "none",
+    "requiredContexts": [],
+    "deployPath": "No repository-local CI workflow is present; changes should be validated with JSON parsing and Renovate dry-run or affected-repository readback when policy changes are material.",
+    "productionProof": "Preset changes require JSON validation plus evidence that consuming repositories can resolve the preset and, for material policy changes, Renovate dry-run or affected-repo readback.",
+    "recoveryClass": "source-revertable"
+  },
+  "adoption": {
+    "status": "baseline",
+    "gaps": [
+      {
+        "id": "ci-missing",
+        "description": "Add a lightweight CI workflow for JSON validation and Renovate config validation.",
+        "owner": "TseFamily/renovate-config",
+        "target": "Before full adoption"
+      },
+      {
+        "id": "dry-run-proof-missing",
+        "description": "Document Renovate dry-run or affected-repository readback evidence required after material preset changes.",
+        "owner": "TseFamily/renovate-config",
+        "target": "Before full adoption"
+      },
+      {
+        "id": "adr6-linkage-needs-doc",
+        "description": "Link this relay explicitly to the upstream ADR or doctrine record that defines Sylphx Renovate ownership.",
+        "owner": "TseFamily/renovate-config",
+        "target": "Before full adoption"
+      }
+    ]
+  }
+}
